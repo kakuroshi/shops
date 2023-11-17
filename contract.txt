@@ -1,0 +1,177 @@
+// SPDX-License-Identifier: MIT 
+pragma solidity >=0.8.0; 
+ 
+contract Fish { 
+    // roles: 0 - user, 1 - admin, 2 - seller 
+    struct User{ 
+        string login; 
+        bytes32 password; 
+        uint role; 
+        address shop; 
+    } 
+ 
+    struct Store { 
+        string name; 
+        string town; 
+        address[] sellers; 
+    } 
+ 
+    struct Recall { 
+        address user; 
+        string comment; 
+        uint rating; 
+    } 
+ 
+    struct req { 
+        address applicant; 
+        bool result; 
+        uint desiredRole; 
+        address shop; 
+    } 
+ 
+    mapping (address => Recall[]) feedbacks; 
+ 
+    mapping (address => User) users; 
+    address[] public usersMas; 
+ 
+    mapping (address => Store) stores; 
+    address[] public storesMas; 
+ 
+    req[] public requests; 
+ 
+    constructor() { 
+        // users[0x5B38Da6a701c568545dCfcB03FcB875f56beddC4] = User("Sergey", 0x66db2d5b0c8395349e0d33b16d84e3840bce2c8f05fb5b413c1f78a8a21ccc4d, 1, address(0)); 
+        // usersMas.push(0x5B38Da6a701c568545dCfcB03FcB875f56beddC4); 
+ 
+        // users[0xAb8483F64d9C6d1EcF9b849Ae677dD3315835cb2] = User("Shuklin", 0x8c70e2a7950a39948f3665670be16e88af9850da17902ec5629f4886e44ef9bd, 2, address(0)); 
+        // usersMas.push(0xAb8483F64d9C6d1EcF9b849Ae677dD3315835cb2); 
+ 
+        // address[] memory ge;  
+ 
+        // stores[0xdD870fA1b7C4700F2BD7f44238821C26f7392148] = Store("Galka", "Kaluga", ge); 
+        // stores[0xdD870fA1b7C4700F2BD7f44238821C26f7392148].sellers.push(0xAb8483F64d9C6d1EcF9b849Ae677dD3315835cb2); 
+        // storesMas.push(0xdD870fA1b7C4700F2BD7f44238821C26f7392148); 
+    }
+
+    function changeRole (address _user, uint _role, address _shop) public {
+        require(users[msg.sender].role == 1, "Not admin");
+        require(users[_user].role != 1, "Insufficient rights");
+
+        if (_role == 0) {
+            users[_user].role = 0;
+            users[_user].shop = address(0);
+        } else if (_role == 2) {
+            users[_user].role = 2;
+            users[_user].shop = _shop;
+        }
+    }
+
+    function answerRequest (uint _id) public {
+        require(users[msg.sender].role == 1, "Not admin");
+
+        if (requests[_id].result == false && requests[_id].desiredRole == 2) {
+            users[requests[_id].applicant].role = 2;
+            users[requests[_id].applicant].shop = requests[_id].shop;
+        } else if (requests[_id].result == false && requests[_id].desiredRole == 0) {
+            users[requests[_id].applicant].role = 0;
+            users[requests[_id].applicant].shop = address(0);
+        }
+    }
+ 
+    function getUsers() public view returns(address[] memory) { 
+        return usersMas; 
+    } 
+ 
+    function getStores() public view returns(address[] memory) { 
+        return storesMas; 
+    } 
+ 
+    function rateTheStore (string memory _comment, uint _rating, address _shop) public { 
+        require(keccak256(abi.encodePacked(users[msg.sender].login)) != keccak256(abi.encodePacked(""))); 
+        require(users[msg.sender].role == 2 || users[msg.sender].role == 0); 
+        require(_rating >= 0 && _rating <= 10, "Uncorrect rating"); 
+ 
+        if (users[msg.sender].role == 0) { 
+            require(_rating > 0, "Uncorrect rating"); 
+ 
+            feedbacks[_shop].push(Recall(msg.sender, _comment, _rating)); 
+ 
+        } else if (users[msg.sender].role == 2) { 
+            require(_rating == 0, "Uncorrect rating"); 
+ 
+            feedbacks[_shop].push(Recall(msg.sender, _comment, 0)); 
+        } 
+    } 
+ 
+    function createStore (address _address, string memory _name, string memory _town) public { 
+        require(users[msg.sender].role == 1, "Not admin"); 
+        require(keccak256(abi.encodePacked(stores[_address].name)) != keccak256(abi.encodePacked(""))); 
+ 
+        address[] memory _sellers; 
+        stores[_address] = Store(_name, _town, _sellers); 
+        storesMas.push(_address); 
+    } 
+ 
+    function deleteStore (address _address) public { 
+        require(users[msg.sender].role == 1, "Not admin"); 
+        require(keccak256(abi.encodePacked(stores[_address].name)) == keccak256(abi.encodePacked("")), "The store doesn't exist"); 
+ 
+        for (uint i = 0; i < storesMas.length; i++) { 
+            if (storesMas[i] == _address) { 
+                for (uint j = 0; j < storesMas.length-1; j++) { 
+                    storesMas[j] = storesMas[j+1]; 
+                } 
+                storesMas.pop(); 
+                delete stores[_address]; 
+            } 
+        } 
+    } 
+ 
+    function registerAdmin (string memory _name, address _user, bytes32 _password) public  { 
+        require(users[msg.sender].role == 1, "Not admin"); 
+ 
+        users[_user] = User(_name, _password, 1, address(0)); 
+        usersMas.push(_user); 
+    } 
+ 
+    function registerUser (string memory _login, bytes32 _password) public  { 
+        require(keccak256(abi.encodePacked(users[msg.sender].login)) == keccak256(abi.encodePacked(""))); 
+ 
+        users[msg.sender] = User(_login, _password, 0, address(0)); 
+        usersMas.push(msg.sender);
+    } 
+ 
+    function requestToSeller (address _shop) public { 
+        require(users[msg.sender].role == 0); 
+ 
+        if (users[msg.sender].shop != address(0)) { 
+            users[msg.sender].role = 2; 
+        } else { 
+            for (uint i = 0; i < requests.length; i++) { 
+                if (requests[i].applicant == msg.sender && requests[i].desiredRole == 2 && requests[i].result == false) { 
+                    return require(requests[i].result != true, "application has been processed");
+                }
+            }
+            requests.push(req(msg.sender, false, 2, _shop));
+        }
+    }
+
+    function requestToUser () public {
+        require(users[msg.sender].role == 2 || users[msg.sender].role == 1);
+
+        if (users[msg.sender].role == 2) {
+            for (uint i = 0; i < requests.length; i++) {
+                if (requests[i].applicant == msg.sender && requests[i].desiredRole == 0 && requests[i].result == false) {
+                    return require(requests[i].result != true, "application has been processed");
+                }
+            }
+            requests.push(req(msg.sender, false, 0, address(0)));
+        } else {
+            users[msg.sender].role = 0;
+        }
+    }
+
+    function getUserInfo(address user_address) public view returns (User memory) {
+        return users[user_address];
+    }
+}

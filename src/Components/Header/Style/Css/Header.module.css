@@ -1,0 +1,188 @@
+.header{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 10vh;
+    background: linear-gradient(180deg, rgb(0, 234, 255) 0%, rgb(71, 246, 255) 100%);
+    margin-bottom: 5vh;
+    border-bottom: 1px solid;
+    border-color: rgb(54, 184, 209);
+}
+
+.user_information{
+    margin-left: 5%;
+}
+
+.btns_header{
+    margin-right: 5%;
+    display: flex;
+    width: 20%;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.enter_btn, .register_btn, .exit_btn{
+    background-color: rgb(24, 218, 252);
+    border: 0px;
+    width: 40%;
+    height: 5vh;
+    font-size: 1.2em;
+}
+
+.enter_btn:hover, .register_btn:hover, .exit_btn:hover{
+    background-color: rgb(26, 202, 233);
+}
+
+.enter_modal{
+    background-color: rgb(146, 255, 255);
+    width: 50%;
+    height: 55vh;
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    position: fixed;
+    top: 15%;
+    right: 25%;
+    z-index:100;
+    box-shadow: 0px 0px 30px rgb(26, 179, 213);
+}
+
+.inputs_modal{
+    width: 80%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    .login_text_modal, .password_text_modal, .address_text_modal{
+        font-size: 2em;
+        margin-bottom: 2vh;
+    }
+    
+    .password_input_modal, .input_login_modal, .input_address_modal{
+        border: 0px;
+        border-bottom: 2px solid;
+        border-color: rgb(34, 207, 207);
+        background-color: transparent;
+        width: 60%;
+        margin-bottom: 5vh;
+        height: 3vh;
+        outline: none;
+        font-size: 1.3em;
+        margin-right: 5%;
+    }
+    
+    .password_input_modal{
+        margin-left: 8%;
+    }
+
+    .input_login_modal{
+        margin-left: 10%;
+    }
+
+    .input_address_modal{
+        margin-left: 10%;
+    }
+
+    ::placeholder{
+        color: rgb(51, 145, 161);
+    }
+}
+
+
+.enter_text_modal{
+    font-size: 3em;
+    margin-bottom: 10vh;
+}
+
+.input_help_modal{
+    display: flex;
+    flex-direction: row;
+    align-items: baseline;
+    width: 70%;
+}
+
+.show_password{
+    background-color: transparent;
+    border: 0px;
+}
+
+.register_modal{
+    background-color: rgb(146, 255, 255);
+    width: 50%;
+    height: 50vh;
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    position: fixed;
+    top: 15%;
+    right: 25%;
+    z-index:100;
+    box-shadow: 0px 0px 30px rgb(26, 179, 213);
+}
+
+.register_text_modal{
+    font-size: 3em;
+    margin-bottom: 5vh;
+}
+
+.enter_btn_modal{
+    background-color: rgb(0, 237, 237);
+    border: 0px;
+    width: 20%;
+    height: 5vh;
+    font-size: 2em;
+}
+
+.enter_btn_modal:hover{
+    background-color: rgb(0, 224, 224);
+}
+
+.register_help_div{
+    display: flex;
+    align-items: baseline;
+    margin-bottom: 5vh;
+
+    >div{
+        >input{
+            margin-left: 1vw;
+            margin-right: 1vw;
+            border: 0px;
+            border-bottom: 2px solid;
+            border-color: rgb(34, 207, 207);
+            background-color: transparent;
+            outline: none;
+            font-size: 1.2em;
+        }
+    }
+
+    >label{
+        font-size: 1.5em;
+    }
+
+    >input{
+        margin-left: 1vw;
+        margin-right: 1vw;
+        border: 0px;
+        border-bottom: 2px solid;
+        border-color: rgb(34, 207, 207);
+        background-color: transparent;
+        outline: none;
+        font-size: 1.2em;
+    }
+}
+
+.register_btn_modal{
+    background-color: rgb(0, 237, 237);
+    border: 0px;
+    width: 20%;
+    height: 5vh;
+    font-size: 2em;
+}
+
+.register_btn_modal:hover{
+    background-color: rgb(0, 224, 224);
+}
+
+.address{
+    font-size: 2em;
+}

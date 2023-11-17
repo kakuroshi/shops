@@ -1,0 +1,56 @@
+.change_role{
+    margin-left: 25%;
+}
+
+.head_text{
+    margin-bottom: 5vh;
+}
+
+.inpAdress, .magazine{
+    >input{
+        background-color: transparent;
+        border: 0px;
+        border-bottom: 1px solid;
+        width: 100%;
+        height: 3vh;
+        margin-bottom: 5vh;
+        outline: none;
+        font-size: 1.3em;
+    }
+
+    >label{
+        font-size: 2em;
+    }
+}
+
+.select_role{
+    width: 60%;
+    height: 3vh;
+    font-size: 1.3em;
+    background-color: transparent;
+    border: 3px solid;
+    border-color: rgb(54, 184, 209);
+    outline: none;
+}
+
+select option {
+    background-color: rgb(114, 229, 252);
+    font-size: 20px;
+}
+
+.change_btn{
+    margin-top: 5vh;
+    margin-left: 30%;
+    background-color: transparent;
+    border: 3px solid;
+    border-color: rgb(54, 184, 209);
+    width: 30%;
+    height: 5vh;
+    font-size: 1.5em;
+}
+
+.change_btn:hover{
+    background-color: rgb(26, 246, 246);
+    border: 5px solid;
+    border-color: rgb(54, 184, 209);
+}
